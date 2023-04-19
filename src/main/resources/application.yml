@@ -1,0 +1,20 @@
+server:
+  port: 7431
+
+spring:
+  application:
+    name: example-mongodb
+  profiles:
+    active: dev
+  http:
+    multipart:
+      maxFileSize: 20MB
+      maxRequestSize: 20MB
+  data:
+    mongodb:
+      uri: mongodb://Owner:Owner@localhost:27017/dev
+      database: "dev"
+  security:
+    user:
+      name: admin
+      password: admin
