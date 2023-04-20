@@ -3,6 +3,8 @@ package com.lingjun.springsecuritypractice.security.service;
 import com.lingjun.springsecuritypractice.security.model.SecurityUser;
 import com.lingjun.springsecuritypractice.security.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

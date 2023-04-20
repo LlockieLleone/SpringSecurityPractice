@@ -2,12 +2,14 @@ package com.lingjun.springsecuritypractice.security.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Set;
 
 @Data
+@Accessors(chain = true)
 @NoArgsConstructor
 public class SecurityUser implements UserDetails {
 

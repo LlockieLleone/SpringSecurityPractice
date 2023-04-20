@@ -29,7 +29,7 @@ public class TestController {
     @RequestMapping("/matchpassword")
     public String matchpassword(@RequestBody SecurityUser securityUser) {
 
-        return securityUserService.matchPassword(securityUser.getUsername(), securityUser.getPassword());
+        return securityUserService.matchPassword(securityUser.getUsername(), securityUser.getPassword()) ? "success" : "fail";
 
     }
 

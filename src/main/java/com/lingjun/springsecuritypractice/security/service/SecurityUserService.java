@@ -39,11 +39,11 @@ public class SecurityUserService {
 
     }
 
-    public String matchPassword(String username, String password) {
+    public boolean matchPassword(String username, String password) {
 
         User user = findUserByUsername(username);
 
-        return bCryptPasswordEncoder.matches(password, user.getPassword()) ? "success" : "fail";
+        return bCryptPasswordEncoder.matches(password, user.getPassword());
 
     }
 
