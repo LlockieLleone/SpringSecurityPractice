@@ -14,7 +14,3 @@ spring:
     mongodb:
       uri: mongodb://Owner:Owner@localhost:27017/dev
       database: "dev"
-  security:
-    user:
-      name: admin
-      password: admin
