@@ -79,11 +79,19 @@ public class JwtTokenUtil {
         Set<GrantedAuthority> authoritiesSet = new HashSet();
         try {
             final Claims claims = getClaimsFromToken(token);
-            String roles = (String) claims.get(JwtParametric.CLAIM_KEY_ROLE);
-            if(StringUtils.hasLength(roles)){
-                roles = roles.substring(1, roles.length() - 1);
-                String[] roleArray = roles.split(",");
-                for(String role : roleArray){
+//            String roles = (String) claims.get(JwtParametric.CLAIM_KEY_ROLE);
+//            if(StringUtils.hasLength(roles)){
+//                roles = roles.substring(1, roles.length() - 1);
+//                String[] roleArray = roles.split(",");
+//                for(String role : roleArray){
+//                    GrantedAuthority authority = new SimpleGrantedAuthority(role);
+//                    authoritiesSet.add(authority);
+//                }
+//            }
+
+            List<String> roles = (List<String>) claims.get(JwtParametric.CLAIM_KEY_ROLE);
+            if(!roles.isEmpty()){
+                for(String role : roles){
                     GrantedAuthority authority = new SimpleGrantedAuthority(role);
                     authoritiesSet.add(authority);
                 }

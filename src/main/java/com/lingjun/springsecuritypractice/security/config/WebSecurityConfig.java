@@ -21,6 +21,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
@@ -74,15 +75,15 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain (HttpSecurity httpSecurity) throws Exception {
 
-
         String[] permitUrls = new String[]{"/login", "/register"};
 
         httpSecurity.csrf().disable();
 
         httpSecurity.authorizeHttpRequests()
-                .requestMatchers(permitUrls).permitAll()
+                .requestMatchers("/anonymous/**").anonymous()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .requestMatchers("/visitor/**").hasRole("VISITOR")
+                .requestMatchers(permitUrls).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling()

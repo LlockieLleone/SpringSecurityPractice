@@ -35,24 +35,26 @@ public class SecurityAuthTokenFilter extends BasicAuthenticationFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         String token = request.getHeader(JwtParametric.headerString);
-        Set<GrantedAuthority> authorities = jwtTokenUtil.getAuthoritiesFromToken(token);
-        String username = jwtTokenUtil.getUsernameFromToken(token);
-        if(username != null && authorities != null){
-            SecurityUser securityUser = new SecurityUser().setUsername(username).setAuthorities(authorities);
-        }else{
-            ServletUtils.render(request,response, Response.fail("Token expired or invalid"));
-            return;
-        }
+        if(StringUtils.hasLength(token)) {
+            Set<GrantedAuthority> authorities = jwtTokenUtil.getAuthoritiesFromToken(token);
+            String username = jwtTokenUtil.getUsernameFromToken(token);
+            if (username != null && authorities != null) {
+                SecurityUser securityUser = new SecurityUser().setUsername(username).setAuthorities(authorities);
+            } else {
+                ServletUtils.render(request, response, Response.fail("Token expired or invalid, need to login again"));
+                return;
+            }
 
-        if(username != null && SecurityContextHolder.getContext().getAuthentication() == null){
-            // If not expired, keep login status
-            if(!jwtTokenUtil.validateTokenIsExpired(token)){
-                // Store user information in authentication for easy verification in the future
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(username, null, authorities);
-                //SecurityContextHolder authorization verification context
-                SecurityContext context = SecurityContextHolder.getContext();
-                //Indicates that the user has passed authentication
-                context.setAuthentication(authentication);
+            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                // If not expired, keep login status
+                if (!jwtTokenUtil.validateTokenIsExpired(token)) {
+                    // Store user information in authentication for easy verification in the future
+                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(username, null, authorities);
+                    //SecurityContextHolder authorization verification context
+                    SecurityContext context = SecurityContextHolder.getContext();
+                    //Indicates that the user has passed authentication
+                    context.setAuthentication(authentication);
+                }
             }
         }
 

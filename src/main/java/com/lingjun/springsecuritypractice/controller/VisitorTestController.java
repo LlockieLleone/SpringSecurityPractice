@@ -16,21 +16,7 @@ public class VisitorTestController {
 
     @RequestMapping("/test")
     public String hello() {
-        return "test success!";
-    }
-
-    @RequestMapping("/changepassword")
-    public String changepassword(@RequestBody SecurityUser securityUser) {
-
-        return securityUserService.changePassword(securityUser.getUsername(), securityUser.getPassword());
-
-    }
-
-    @RequestMapping("/matchpassword")
-    public String matchpassword(@RequestBody SecurityUser securityUser) {
-
-        return securityUserService.matchPassword(securityUser.getUsername(), securityUser.getPassword()) ? "success" : "fail";
-
+        return "visitor test success!";
     }
 
 }
