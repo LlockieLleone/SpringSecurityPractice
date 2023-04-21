@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -78,7 +79,7 @@ public class JwtTokenFilter extends AbstractAuthenticationProcessingFilter {
             result="Account Locked";
         }
         // 用户不存在
-        else if (failed instanceof InternalAuthenticationServiceException) {
+        else if (failed instanceof UsernameNotFoundException) {
             result="User Not Exist";
         }
         // 其他错误
