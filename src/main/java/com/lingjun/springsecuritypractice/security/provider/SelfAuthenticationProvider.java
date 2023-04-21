@@ -11,17 +11,19 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Component;
+
+import java.util.Objects;
 
 /**
  * 自定义认证逻辑
  */
-//@Component
+@Component
 public class SelfAuthenticationProvider implements AuthenticationProvider{
     @Resource
     private SecurityService securityService;
 
-    @Resource
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -30,10 +32,14 @@ public class SelfAuthenticationProvider implements AuthenticationProvider{
         //获取密码
         String password = String.valueOf(authentication.getCredentials());
 
-        UserDetails userDetails= securityService.loadUserByUsername(username);
+        UserDetails userDetails = securityService.loadUserByUsername(username);
 
-        if(bCryptPasswordEncoder.matches(password,userDetails.getPassword())){
-            return new UsernamePasswordAuthenticationToken(username, password, userDetails.getAuthorities());
+//        if(bCryptPasswordEncoder.matches(userDetails.getPassword(), password)){
+//            return new UsernamePasswordAuthenticationToken(username, password, userDetails.getAuthorities());
+//        }
+
+        if(password.equals(userDetails.getPassword())){
+            return new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
         }
 
         throw new BadCredentialsException("Password is incorrect, please log in again!");

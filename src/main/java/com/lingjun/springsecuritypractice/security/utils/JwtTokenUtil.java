@@ -1,16 +1,14 @@
 package com.lingjun.springsecuritypractice.security.utils;
 
 import com.lingjun.springsecuritypractice.security.model.JwtParametric;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.util.StringUtils;
 
 import java.util.*;
@@ -22,7 +20,12 @@ public class JwtTokenUtil {
         Map<String, Object> claims = new HashMap<>();
         claims.put(JwtParametric.CLAIM_KEY_USERNAME, userDetails.getUsername());
         claims.put(JwtParametric.CLAIM_KEY_CREATED, new Date());
-        claims.put(JwtParametric.CLAIM_KEY_ROLE, userDetails.getAuthorities());
+        Set<SimpleGrantedAuthority> authorities = (Set<SimpleGrantedAuthority>) userDetails.getAuthorities();
+        Set<String> roles = new HashSet<>();
+        for (SimpleGrantedAuthority authority : authorities) {
+            roles.add(authority.getAuthority());
+        }
+        claims.put(JwtParametric.CLAIM_KEY_ROLE, roles);
         return generateToken(claims);
     }
 

@@ -6,9 +6,7 @@ import com.lingjun.springsecuritypractice.security.model.LoginDTO;
 import com.lingjun.springsecuritypractice.security.model.SecurityUser;
 import com.lingjun.springsecuritypractice.security.utils.JwtTokenUtil;
 import com.lingjun.springsecuritypractice.security.utils.ServletUtils;
-import jakarta.annotation.Resource;
 import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.*;
@@ -22,8 +20,7 @@ import java.io.IOException;
 
 public class JwtTokenFilter extends AbstractAuthenticationProcessingFilter {
 
-    @Resource
-    private JwtTokenUtil jwtTokenUtil;
+    private JwtTokenUtil jwtTokenUtil = new JwtTokenUtil();
 
     private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
@@ -38,7 +35,7 @@ public class JwtTokenFilter extends AbstractAuthenticationProcessingFilter {
 
         LoginDTO user = new ObjectMapper().readValue(request.getInputStream(), LoginDTO.class);
 
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user.getUsername(), bCryptPasswordEncoder.encode(user.getPassword()));
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
 
         return getAuthenticationManager().authenticate(authenticationToken);
     }
@@ -46,11 +43,11 @@ public class JwtTokenFilter extends AbstractAuthenticationProcessingFilter {
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication auth){
 
-        SecurityUser pricipal = (SecurityUser) auth.getPrincipal();
-        String token = jwtTokenUtil.generateToken(pricipal);
+        SecurityUser principal = (SecurityUser) auth.getPrincipal();
+        String token = jwtTokenUtil.generateToken(principal);
 
         try{
-            ServletUtils.render(request, response, Response.success(token));
+            ServletUtils.render(request, response, Response.success(token, "token generated successfully"));
         }catch(IOException e){
             e.printStackTrace();
         }

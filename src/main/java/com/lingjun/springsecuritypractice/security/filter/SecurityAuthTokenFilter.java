@@ -25,7 +25,7 @@ import java.util.Set;
 
 public class SecurityAuthTokenFilter extends BasicAuthenticationFilter {
 
-    @Resource JwtTokenUtil jwtTokenUtil;
+    JwtTokenUtil jwtTokenUtil = new JwtTokenUtil();
 
     public SecurityAuthTokenFilter(AuthenticationManager authenticationManager) {
         super(authenticationManager);

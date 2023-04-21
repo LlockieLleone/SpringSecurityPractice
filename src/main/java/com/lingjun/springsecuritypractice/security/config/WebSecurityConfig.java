@@ -6,12 +6,12 @@ import com.lingjun.springsecuritypractice.security.handler.AccessDeny;
 import com.lingjun.springsecuritypractice.security.handler.AnonymousAuthenticationEntryPoint;
 import com.lingjun.springsecuritypractice.security.handler.AuthenticationLogout;
 import com.lingjun.springsecuritypractice.security.provider.SelfAuthenticationProvider;
-import com.lingjun.springsecuritypractice.security.service.SecurityService;
 import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -34,7 +34,6 @@ public class WebSecurityConfig {
 
     private AccessDeny accessDeny;
 
-    @Resource
     private SelfAuthenticationProvider selfAuthenticationProvider;
 
     @Autowired
@@ -52,10 +51,10 @@ public class WebSecurityConfig {
         this.accessDeny = accessDeny;
     }
 
-//    @Autowired
-//    public void setSelfAuthenticationProvider(SelfAuthenticationProvider selfAuthenticationProvider) {
-//        this.selfAuthenticationProvider = selfAuthenticationProvider;
-//    }
+    @Autowired
+    public void setSelfAuthenticationProvider(SelfAuthenticationProvider selfAuthenticationProvider) {
+        this.selfAuthenticationProvider = selfAuthenticationProvider;
+    }
 
 //    @Bean
 //    public PasswordEncoder passwordEncoder() {
@@ -65,9 +64,10 @@ public class WebSecurityConfig {
     //使用自定义的AuthenticationProvider
     @Bean
     public AuthenticationManager authManager(HttpSecurity httpSecurity) throws Exception {
-        AuthenticationManagerBuilder authenticationManagerBuilder = httpSecurity.getSharedObject(AuthenticationManagerBuilder.class);
-        authenticationManagerBuilder.authenticationProvider(selfAuthenticationProvider);
-        return authenticationManagerBuilder.build();
+//        AuthenticationManagerBuilder authenticationManagerBuilder = httpSecurity.getSharedObject(AuthenticationManagerBuilder.class);
+//        authenticationManagerBuilder.authenticationProvider(selfAuthenticationProvider);
+//        return authenticationManagerBuilder.build();
+        return new ProviderManager(selfAuthenticationProvider);
     }
 
     //SecurityFilterChain 用于配置HttpSecurity
@@ -75,7 +75,7 @@ public class WebSecurityConfig {
     public SecurityFilterChain filterChain (HttpSecurity httpSecurity) throws Exception {
 
 
-        String[] permitUrls = new String[]{"/auth/login", "/auth/register"};
+        String[] permitUrls = new String[]{"/login", "/register"};
 
         httpSecurity.csrf().disable();
 

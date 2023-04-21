@@ -1,6 +1,7 @@
 package com.lingjun.springsecuritypractice.security.utils;
 
 import com.google.gson.Gson;
+import com.lingjun.springsecuritypractice.model.common.Response;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
